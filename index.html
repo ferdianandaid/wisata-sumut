@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wisata Populer Sumatra Utara</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <button id="darkModeToggle">🌙 Dark Mode</button>
+        <h1>Wisata Populer Sumatra Utara</h1>
+        <p>Temukan destinasi wisata terbaik di Sumatra Utara untuk liburanmu!</p>
+    </header>
+    <div class="container">
+        <input type="text" id="searchBar" placeholder="Cari destinasi wisata...">
+        <div class="grid" id="wisataGrid">
+            <!-- Data wisata akan diisi oleh JS -->
+        </div>
+    </div>
+    <footer>
+        &copy; 2024 Wisata Sumatra Utara &mdash; Dibuat untuk edukasi.
+    </footer>
+    <script>
+        // Data default (jika API gagal)
+        const wisataDefault = [
+            {
+                id: "danau-toba",
+                nama: "Danau Toba",
+                lokasi: "Kabupaten Samosir & sekitarnya",
+                deskripsi: "Danau vulkanik terbesar di dunia dengan panorama indah, pulau Samosir di tengahnya, dan budaya Batak yang kental.",
+                gambar: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+                galeri: [
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80"
+                ]
+            },
+            {
+                id: "sipiso-piso",
+                nama: "Air Terjun Sipiso-piso",
+                lokasi: "Kabupaten Karo",
+                deskripsi: "Salah satu air terjun tertinggi di Indonesia dengan ketinggian 120 meter, menawarkan pemandangan spektakuler.",
+                gambar: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=800&q=80",
+                galeri: [
+                    "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
+                ]
+            },
+            {
+                id: "bukit-lawang",
+                nama: "Bukit Lawang",
+                lokasi: "Kabupaten Langkat",
+                deskripsi: "Surga bagi pecinta alam dan satwa liar, terkenal sebagai tempat konservasi orangutan Sumatra di Taman Nasional Gunung Leuser.",
+                gambar: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80",
+                galeri: [
+                    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
+                ]
+            },
+            {
+                id: "simalem-resort",
+                nama: "Taman Simalem Resort",
+                lokasi: "Kabupaten Karo",
+                deskripsi: "Resort mewah di ketinggian dengan pemandangan Danau Toba, taman bunga, dan berbagai aktivitas outdoor.",
+                gambar: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                galeri: [
+                    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80"
+                ]
+            },
+            {
+                id: "istana-maimun",
+                nama: "Istana Maimun",
+                lokasi: "Kota Medan",
+                deskripsi: "Ikon kota Medan, istana megah peninggalan Kesultanan Deli dengan arsitektur unik perpaduan Melayu, Timur Tengah, dan Eropa.",
+                gambar: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=800&q=80",
+                galeri: [
+                    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
+                ]
+            },
+            {
+                id: "pantai-parbaba",
+                nama: "Pantai Parbaba",
+                lokasi: "Pulau Samosir",
+                deskripsi: "Pantai pasir putih di tepi Danau Toba, cocok untuk berenang, bermain pasir, dan menikmati sunset.",
+                gambar: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80",
+                galeri: [
+                    "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=80"
+                ]
+            },
+            {
+                id: "tangkahan",
+                nama: "Tangkahan",
+                lokasi: "Kabupaten Langkat",
+                deskripsi: "Destinasi ekowisata di hutan tropis, terkenal dengan aktivitas mandi gajah, tubing, dan air terjun alami.",
+                gambar: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80",
+                galeri: [
+                    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80"
+                ]
+            }
+        ];
+
+        // Review & rating di localStorage
+        function getReviewData() {
+            return JSON.parse(localStorage.getItem('wisataReviews') || '{}');
+        }
+        function saveReviewData(data) {
+            localStorage.setItem('wisataReviews', JSON.stringify(data));
+        }
+
+        // Render card
+        function renderWisata(data) {
+            const grid = document.getElementById('wisataGrid');
+            const reviewData = getReviewData();
+            grid.innerHTML = '';
+            data.forEach(wisata => {
+                // Galeri
+                let galeriHTML = '';
+                if (wisata.galeri && wisata.galeri.length > 0) {
+                    galeriHTML = `<div class="gallery" data-id="${wisata.id}">` +
+                        wisata.galeri.map((img, idx) =>
+                            `<img src="${img}" data-main="${wisata.galeri[0]}" data-idx="${idx}" alt="Galeri ${wisata.nama}">`
+                        ).join('') +
+                        `</div>`;
+                }
+                // Rating
+                const rating = reviewData[wisata.id]?.rating || 0;
+                const ratingCount = reviewData[wisata.id]?.ratingCount || 0;
+                let avgRating = ratingCount ? (rating / ratingCount).toFixed(1) : '-';
+                // Review
+                const reviews = reviewData[wisata.id]?.reviews || [];
+                grid.innerHTML += `
+                <div class="card" data-id="${wisata.id}">
+                    ${galeriHTML}
+                    <img class="main-img" src="${wisata.galeri ? wisata.galeri[0] : wisata.gambar}" alt="${wisata.nama}">
+                    <div class="card-content">
+                        <div class="card-title">${wisata.nama}</div>
+                        <div class="card-desc">${wisata.deskripsi || '-'}</div>
+                        <div class="card-location">${wisata.lokasi || '-'}</div>
+                        <div class="rating" data-id="${wisata.id}">
+                            ${[1,2,3,4,5].map(i =>
+                                `<span class="star${avgRating >= i ? ' selected' : ''}" data-value="${i}">&#9733;</span>`
+                            ).join('')}
+                            <span style="margin-left:8px;font-size:0.95em;color:#888;">${avgRating} (${ratingCount})</span>
+                        </div>
+                        <div class="reviews">
+                            <b>Review:</b>
+                            <ul class="review-list" id="review-list-${wisata.id}">
+                                ${reviews.map(r => `<li>${r}</li>`).join('')}
+                            </ul>
+                            <form class="add-review" data-id="${wisata.id}">
+                                <input type="text" placeholder="Tulis review..." maxlength="80" required>
+                                <button type="submit">Kirim</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            // Galeri event
+            document.querySelectorAll('.gallery').forEach(gal => {
+                gal.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'IMG') {
+                        const card = gal.closest('.card');
+                        const mainImg = card.querySelector('.main-img');
+                        mainImg.src = e.target.src;
+                        gal.querySelectorAll('img').forEach(img => img.classList.remove('selected'));
+                        e.target.classList.add('selected');
+                    }
+                });
+            });
+            // Rating event
+            document.querySelectorAll('.rating').forEach(ratingEl => {
+                ratingEl.querySelectorAll('.star').forEach(star => {
+                    star.addEventListener('click', function() {
+                        const val = parseInt(this.getAttribute('data-value'));
+                        const id = ratingEl.getAttribute('data-id');
+                        let reviewData = getReviewData();
+                        if (!reviewData[id]) reviewData[id] = {rating:0, ratingCount:0, reviews:[]};
+                        reviewData[id].rating = (reviewData[id].rating || 0) + val;
+                        reviewData[id].ratingCount = (reviewData[id].ratingCount || 0) + 1;
+                        saveReviewData(reviewData);
+                        renderWisata(currentData); // re-render
+                    });
+                });
+            });
+            // Review event
+            document.querySelectorAll('.add-review').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const id = form.getAttribute('data-id');
+                    const input = form.querySelector('input');
+                    let reviewData = getReviewData();
+                    if (!reviewData[id]) reviewData[id] = {rating:0, ratingCount:0, reviews:[]};
+                    if (input.value.trim()) {
+                        reviewData[id].reviews = reviewData[id].reviews || [];
+                        reviewData[id].reviews.push(input.value.trim());
+                        saveReviewData(reviewData);
+                        input.value = '';
+                        renderWisata(currentData); // re-render
+                    }
+                });
+            });
+        }
+
+        // Fetch dari API (opsional, tetap fallback ke default)
+        let currentData = [];
+        fetch('https://api-wisata-indonesia.vercel.app/v1/daerah/sumatera-utara')
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.data && res.data.length > 0) {
+                    // Map data API ke format yang sama
+                    const wisataAPI = res.data.map((item, idx) => ({
+                        id: item.nama.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '') + '-' + idx,
+                        nama: item.nama,
+                        lokasi: item.lokasi,
+                        deskripsi: item.deskripsi,
+                        gambar: item.gambar,
+                        galeri: [item.gambar]
+                    }));
+                    currentData = wisataAPI;
+                    renderWisata(currentData);
+                } else {
+                    currentData = wisataDefault;
+                    renderWisata(currentData);
+                }
+            })
+            .catch(() => {
+                currentData = wisataDefault;
+                renderWisata(currentData);
+            });
+
+        // Search & filter
+        document.getElementById('searchBar').addEventListener('input', function() {
+            const val = this.value.toLowerCase();
+            const filtered = currentData.filter(w =>
+                w.nama.toLowerCase().includes(val) ||
+                (w.lokasi && w.lokasi.toLowerCase().includes(val)) ||
+                (w.deskripsi && w.deskripsi.toLowerCase().includes(val))
+            );
+            renderWisata(filtered);
+        });
+
+        // Dark mode toggle
+        const darkBtn = document.getElementById('darkModeToggle');
+        function setDarkMode(on) {
+            if (on) {
+                document.body.classList.add('dark');
+                darkBtn.textContent = '☀️ Light Mode';
+                localStorage.setItem('darkMode', 'on');
+            } else {
+                document.body.classList.remove('dark');
+                darkBtn.textContent = '🌙 Dark Mode';
+                localStorage.setItem('darkMode', 'off');
+            }
+        }
+        if (localStorage.getItem('darkMode') === 'on' ||
+            (localStorage.getItem('darkMode') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            setDarkMode(true);
+        }
+        darkBtn.addEventListener('click', () => {
+            setDarkMode(!document.body.classList.contains('dark'));
+        });
+    </script>
+</body>
+</html>
