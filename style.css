@@ -1,0 +1,255 @@
+:root {
+    --primary: #1e88e5;
+    --secondary: #43a047;
+    --bg: #f5f5f5;
+    --card-bg: #fff;
+    --shadow: 0 4px 16px rgba(30,136,229,0.08);
+    --text: #222;
+    --footer-bg: #e3f2fd;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+}
+
+header {
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: #fff;
+    padding: 40px 0 30px 0;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(30,136,229,0.1);
+    position: relative;
+}
+
+header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 10px 0;
+    letter-spacing: 2px;
+}
+
+header p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+#darkModeToggle {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#darkModeToggle:hover {
+    background: rgba(0,0,0,0.15);
+}
+
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(30,136,229,0.15);
+}
+
+.card img.main-img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    background: #eee;
+    border-radius: 0;
+}
+
+.card-content {
+    padding: 22px 20px 18px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.card-desc {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    flex: 1;
+}
+
+.card-location {
+    font-size: 0.95rem;
+    color: var(--secondary);
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 24px 0 16px 0;
+    background: var(--footer-bg);
+    color: #333;
+    font-size: 1rem;
+    margin-top: 40px;
+}
+
+@media (max-width: 600px) {
+    header h1 { font-size: 1.5rem; }
+    .container { margin: 20px auto; }
+    .card img.main-img { height: 160px; }
+}
+
+/* Search & Filter */
+#searchBar {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 16px;
+    margin: 0 auto 32px auto;
+    display: block;
+    border: 1.5px solid #bbb;
+    border-radius: 24px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+#searchBar:focus {
+    border: 1.5px solid var(--primary);
+}
+
+/* Rating */
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 8px;
+}
+.rating .star {
+    font-size: 1.2em;
+    color: #ffd600;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.rating .star:hover,
+.rating .star.selected {
+    transform: scale(1.2);
+}
+
+/* Review */
+.reviews {
+    margin-top: 10px;
+    font-size: 0.95em;
+    color: #888;
+}
+.review-list {
+    margin: 8px 0 0 0;
+    padding: 0;
+    list-style: none;
+    max-height: 80px;
+    overflow-y: auto;
+}
+.review-list li {
+    margin-bottom: 6px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 3px;
+    color: #555;
+}
+.add-review {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+.add-review input {
+    flex: 1;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    font-size: 0.95em;
+}
+.add-review button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: background 0.2s;
+}
+.add-review button:hover {
+    background: var(--secondary);
+}
+
+/* Galeri Foto */
+.gallery {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+}
+.gallery img {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border 0.2s;
+}
+.gallery img.selected,
+.gallery img:hover {
+    border: 2px solid var(--primary);
+}
+
+/* DARK MODE */
+body.dark {
+    --primary: #90caf9;
+    --secondary: #66bb6a;
+    --bg: #181c24;
+    --card-bg: #232a36;
+    --shadow: 0 4px 16px rgba(30,136,229,0.15);
+    --text: #f5f5f5;
+    --footer-bg: #222b36;
+}
+body.dark header {
+    color: #fff;
+}
+body.dark .card-title {
+    color: #90caf9;
+}
+body.dark .card-location {
+    color: #66bb6a;
+}
+body.dark footer {
+    color: #eee;
+}
